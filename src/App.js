@@ -16,6 +16,8 @@ import {useAuthState} from 'react-firebase-hooks/auth';
 import {useCollectionData} from 'react-firebase-hooks/firestore';
 
 import Settings from './components/Settings';
+import SignIn from './components/SignIn';
+import SignOut from './components/SignOut';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDhXnMyDGw3ei7-4M-x1LXcEZvATPx0tbc",
@@ -30,45 +32,22 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const firestore  =firebase.firestore();
 
-
-
-
-
 function App() {
   const [user] = useAuthState(auth);
 
   return (
     <div className="App">
       <header className="App-header">
-        <SignOut></SignOut>
+        <SignOut auth={auth}></SignOut>
       </header>
 
       <section>
-      {user ? <ChatRoom/> : <SignIn/>}
+      {user ? <ChatRoom/> : <SignIn auth={auth}/>}
       </section>
     </div>
   );
 }
 
-function SignIn(){
-  const signInWithGoogle = () =>{
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
-  }
-
-  return(
-    <>
-    <button onClick={signInWithGoogle}>Sign in with google</button>
-    <p>Do not violate the community guidelines or you will be banned for life!</p>
-    </>
-  )
-}
-
-function SignOut(){
-  return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign Out</button>
-  )
-}
 
 
 function ChatRoom(){
